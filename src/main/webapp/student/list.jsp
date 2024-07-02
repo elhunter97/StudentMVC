@@ -31,7 +31,6 @@
       <div class="col-6">
         <input type="text" class="form-control" id="searchName" name="searchName" placeholder="Nhập tên học sinh cần tìm kiếm">
       </div>
-
       <div class="col-auto">
         <button type="submit" class="btn btn-primary" >Tìm kiếm</button>
       </div>

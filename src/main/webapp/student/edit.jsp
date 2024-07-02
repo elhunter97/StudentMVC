@@ -29,15 +29,15 @@
     <form method="post">
         <div class="mb-3">
             <label for="name" class="form-label">Họ và tên</label>
-            <input type="text" class="form-control" id="name" name="name" required maxlength="100" minlength="5">
+            <input type="text" class="form-control" id="name" name="name" required maxlength="100" minlength="5" value="${student.name}">
         </div>
         <div class="mb-3">
             <label for="address" class="form-label">Địa chỉ</label>
-            <input type="text" class="form-control" id="address" name="address" required>
+            <input type="text" class="form-control" id="address" name="address" required value="${student.address}">
         </div>
         <div class="mb-3">
             <label for="point" class="form-label">Điểm</label>
-            <input type="text" class="form-control" id="point" name="point" min="0" max="10">
+            <input type="text" class="form-control" id="point" name="point" min="0" max="10" value="${student.point}">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

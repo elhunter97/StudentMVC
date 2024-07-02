@@ -56,6 +56,7 @@ public class StudentControllers extends HttpServlet {
                 Student student = new Student(name,address,point);
                 studentService.save(student);
                 resp.sendRedirect("/student");
+                break;
             case "delete":
                 Long id = Long.parseLong(req.getParameter("id"));
                 Boolean isDelete = studentService.deleteById(id);
@@ -67,6 +68,7 @@ public class StudentControllers extends HttpServlet {
                     req.setAttribute("students", students);
                     req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
                 }
+                break;
             case "edit":
                 Long idEdit =Long.parseLong(req.getParameter("id"));
                 String nameEdit = req.getParameter("name");
@@ -75,11 +77,13 @@ public class StudentControllers extends HttpServlet {
                 Student studentEdit = new Student(nameEdit,addressEdit,pointEdit);
                 studentService.updateById(idEdit,studentEdit);
                 resp.sendRedirect("/student");
+                break;
             case "search":
                 String searchName = req.getParameter("searchName");
                 List<Student> students = studentService.searchByName(searchName);
                 req.setAttribute("students", students);
                 req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
+                break;
         }
     }
 }
