@@ -1,5 +1,6 @@
 package com.hbn.studentmvcservlet.repositories.impl;
 
+import com.hbn.studentmvcservlet.dto.StudentDTO;
 import com.hbn.studentmvcservlet.models.Student;
 import com.hbn.studentmvcservlet.repositories.IStudentRepository;
 
@@ -20,21 +21,24 @@ public class StudentRepository implements IStudentRepository {
         students.add(new Student(5L,"Cook", "Bàn ăn", 2f));
     }
     @Override
-    public List<Student> findAll() {
-        List<Student> students = new ArrayList<>();
+    public List<StudentDTO> findAll() {
+        List<StudentDTO> students = new ArrayList<>();
         try {
-            PreparedStatement  ps = BaseRepository.getConnection().prepareStatement("select * from classroom ");
+            PreparedStatement  ps = BaseRepository.getConnection().
+                    prepareStatement("select id,student.name,address,point,classroom.name_class from student join classroom on student.id_class=classroom.id_class");
             ResultSet resultSet = ps.executeQuery();
             Long id;
             String name;
             String address;
             Float point;
+            String nameClass;
             while (resultSet.next()) {
                  id = resultSet.getLong("id");
                  name = resultSet.getString("name");
                  address = resultSet.getString("address");
                  point = resultSet.getFloat("point");
-                students.add(new Student(id,name,address,point));
+                 nameClass = resultSet.getString("name_class");
+                students.add(new StudentDTO(id,name,address,point,nameClass));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -45,10 +49,11 @@ public class StudentRepository implements IStudentRepository {
     @Override
     public void save(Student student) {
         try {
-            PreparedStatement  ps = BaseRepository.getConnection().prepareStatement("insert into classroom(name,address,point) values(?,?,?)");
+            PreparedStatement  ps = BaseRepository.getConnection().prepareStatement("insert into student(name,address,point,id_class) values(?,?,?,?)");
             ps.setString(1, student.getName());
             ps.setString(2, student.getAddress());
             ps.setFloat(3, student.getPoint());
+            ps.setLong(4, student.getId_class());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -62,7 +67,7 @@ public class StudentRepository implements IStudentRepository {
         boolean isDelete;
         PreparedStatement  ps = null;
         try {
-            ps = BaseRepository.getConnection().prepareStatement("delete from classroom where id=?;");
+            ps = BaseRepository.getConnection().prepareStatement("delete from student where id=?;");
             ps.setLong(1,id);
             isDelete = ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -75,7 +80,7 @@ public class StudentRepository implements IStudentRepository {
     public void updateById(Long idEdit, Student studentEdit) {
             PreparedStatement  ps = null;
             try{
-                ps = BaseRepository.getConnection().prepareStatement("update classroom set name = ?, address=?,point=? where id=?");
+                ps = BaseRepository.getConnection().prepareStatement("update student set name = ?, address=?,point=? where id=?");
                 ps.setString(1,studentEdit.getName());
                 ps.setString(2,studentEdit.getAddress());
                 ps.setFloat(3,studentEdit.getPoint());
@@ -90,7 +95,7 @@ public class StudentRepository implements IStudentRepository {
         Student student = null;
         PreparedStatement  ps = null;
         try {
-            ps = BaseRepository.getConnection().prepareStatement("select * from classroom where id=?");
+            ps = BaseRepository.getConnection().prepareStatement("select * from student where id=?");
             ps.setLong(1,idEdit);
             ResultSet resultSet = ps.executeQuery();
             Long id;
@@ -114,7 +119,7 @@ public class StudentRepository implements IStudentRepository {
     public List<Student> searchByName(String searchName) {
         List<Student> studentSearch = new ArrayList<>();
         try {
-            PreparedStatement  ps = BaseRepository.getConnection().prepareStatement("select * from classroom  where name like concat ('%',?,'%')");
+            PreparedStatement  ps = BaseRepository.getConnection().prepareStatement("select * from student  where name like concat ('%',?,'%')");
             ps.setString(1,searchName);
             ResultSet resultSet = ps.executeQuery();
             Long id;

@@ -1,7 +1,11 @@
 package com.hbn.studentmvcservlet.controllers;
 
+import com.hbn.studentmvcservlet.dto.StudentDTO;
+import com.hbn.studentmvcservlet.models.Classroom;
 import com.hbn.studentmvcservlet.models.Student;
+import com.hbn.studentmvcservlet.services.IClassroomService;
 import com.hbn.studentmvcservlet.services.IStudentService;
+import com.hbn.studentmvcservlet.services.impl.ClassroomService;
 import com.hbn.studentmvcservlet.services.impl.StudentService;
 
 import javax.servlet.ServletException;
@@ -15,7 +19,7 @@ import java.util.List;
 @WebServlet(name="StudentControllers",value="/student")
 public class StudentControllers extends HttpServlet {
     private static IStudentService studentService = new StudentService();
-
+    private static IClassroomService classroomService = new ClassroomService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -24,11 +28,10 @@ public class StudentControllers extends HttpServlet {
         }
         switch(action){
             case "create":
+                List<Classroom> classrooms = classroomService.findAll();
+                req.setAttribute("classrooms", classrooms);
                 req.getRequestDispatcher("/student/create.jsp").forward(req, resp);
-            default:
-                List<Student> students = studentService.findAll();
-                req.setAttribute("students", students);
-                req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
+                break;
             case "edit":
                 Long id = Long.parseLong(req.getParameter("id"));
                 Student student = studentService.findById(id);
@@ -38,6 +41,11 @@ public class StudentControllers extends HttpServlet {
                 }else{
                     req.getRequestDispatcher("/student/error-404.jsp").forward(req, resp);
                 }
+                break;
+            default:
+                List<StudentDTO> students = studentService.findAll();
+                req.setAttribute("students", students);
+                req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
         }
     }
 
@@ -53,7 +61,8 @@ public class StudentControllers extends HttpServlet {
                 String name = req.getParameter("name");
                 String address = req.getParameter("address");
                 Float point = Float.parseFloat( req.getParameter("point"));
-                Student student = new Student(name,address,point);
+                Long id_class = Long.parseLong(req.getParameter("classroom"));
+                Student student = new Student(name,address,point,id_class);
                 studentService.save(student);
                 resp.sendRedirect("/student");
                 break;
@@ -64,7 +73,7 @@ public class StudentControllers extends HttpServlet {
                     resp.sendRedirect("/student");
                 }else{
                     req.setAttribute("message","Xóa không thành công");
-                    List<Student> students = studentService.findAll();
+                    List<StudentDTO> students = studentService.findAll();
                     req.setAttribute("students", students);
                     req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
                 }

@@ -1,41 +1,21 @@
-package com.hbn.studentmvcservlet.models;
+package com.hbn.studentmvcservlet.dto;
 
-public class Student {
+public class StudentDTO {
     private Long id;
     private String name;
     private String address;
     private Float point;
-    private Long id_class;
+    private String nameClass;
 
-    public Student() {
+    public StudentDTO() {
     }
 
-    public Student(Long id, String name, String address, Float point) {
+    public StudentDTO(Long id, String name, String address, Float point, String nameClass) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.point = point;
-    }
-
-    public Student(String name, String address, Float point) {
-        this.name = name;
-        this.address = address;
-        this.point = point;
-    }
-
-    public Student(String name, String address, Float point, Long id_class) {
-        this.name = name;
-        this.address = address;
-        this.point = point;
-        this.id_class = id_class;
-    }
-
-    public Long getId_class() {
-        return id_class;
-    }
-
-    public void setId_class(Long id_class) {
-        this.id_class = id_class;
+        this.nameClass = nameClass;
     }
 
     public Long getId() {
@@ -68,5 +48,13 @@ public class Student {
 
     public void setPoint(Float point) {
         this.point = point;
+    }
+
+    public String getNameClass() {
+        return nameClass;
+    }
+
+    public void setNameClass(String nameClass) {
+        this.nameClass = nameClass;
     }
 }

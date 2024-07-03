@@ -1,11 +1,12 @@
 package com.hbn.studentmvcservlet.services;
 
+import com.hbn.studentmvcservlet.dto.StudentDTO;
 import com.hbn.studentmvcservlet.models.Student;
 
 import java.util.List;
 
 public interface IStudentService {
-    List<Student> findAll();
+    List<StudentDTO> findAll();
 
     void save(Student student);
 

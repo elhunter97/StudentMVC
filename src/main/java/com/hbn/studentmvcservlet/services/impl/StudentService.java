@@ -1,5 +1,6 @@
 package com.hbn.studentmvcservlet.services.impl;
 
+import com.hbn.studentmvcservlet.dto.StudentDTO;
 import com.hbn.studentmvcservlet.models.Student;
 import com.hbn.studentmvcservlet.repositories.IStudentRepository;
 import com.hbn.studentmvcservlet.repositories.impl.StudentRepository;
@@ -10,7 +11,7 @@ import java.util.List;
 public class StudentService implements IStudentService {
     private static IStudentRepository studentRepository = new StudentRepository();
     @Override
-    public List<Student> findAll() {
+    public List<StudentDTO> findAll() {
         return studentRepository.findAll();
     }
 
